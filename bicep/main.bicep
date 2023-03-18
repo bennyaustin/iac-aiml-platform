@@ -61,12 +61,13 @@ module cogsvc './modules/cognitive.bicep' = {
  name: cogsvc_deployment_name
  scope: aiml_rg
  params:{
-   cogsvc_name: 'ba-cogsvc01'
    formrecognizer_name: 'ba-formrecognizer01'
+   custom_model_storage_name: 'bacustmodelstorage01'
+   custom_model_storage_sku: 'Standard_LRS'
    location: rglocation
    cost_centre_tag: cost_centre_tag
    owner_tag: owner_tag
    sme_tag: sme_tag
-   sku: 'S0'
+   formrecognizer_sku: 'S0'
  }
 }
