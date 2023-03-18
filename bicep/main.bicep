@@ -17,6 +17,15 @@ param owner_tag string = 'mars@contoso.com'
 @description('Subject Matter EXpert (SME) tag that will be applied to all resources in this deployment')
 param sme_tag string ='venus@contoso.com'
 
+@description('Flag to indicate whether to enable integration of data platform resources with either an existing Purview resource')
+param enable_purview bool =true
+
+@description('Resource Group Name of an existing Purview Account. Required if create_purview=true')
+param purview_rg_name string = 'rg-datagovernance'
+
+@description('Resource Name of an existing Purview Account. Required if create_purview=true')
+param purview_resource_name string = 'ba-purview01-6spfx5oytiivq'
+
 @description('Timestamp that will be appendedto the deployment name')
 param deployment_suffix string = utcNow()
 
@@ -56,6 +65,17 @@ resource kv_ref 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   scope: aiml_rg
 }
 
+//Get existing Purview reference
+resource purview_rg_ref 'Microsoft.Resources/resourceGroups@2022-09-01' existing = if (enable_purview) {
+  name: purview_rg_name
+  scope: subscription()
+}
+
+resource purview_ref 'Microsoft.Purview/accounts@2021-07-01' existing = if (enable_purview) {
+  name: purview_resource_name
+  scope: purview_rg_ref
+}
+
 // Deploy Cognitive Services
 module cogsvc './modules/cognitive.bicep' = {
  name: cogsvc_deployment_name
@@ -69,5 +89,11 @@ module cogsvc './modules/cognitive.bicep' = {
    owner_tag: owner_tag
    sme_tag: sme_tag
    formrecognizer_sku: 'S0'
+   enable_purview: enable_purview
+   purview_resource: purview_ref
  }
 }
+
+
+
+

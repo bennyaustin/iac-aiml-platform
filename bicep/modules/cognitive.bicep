@@ -37,6 +37,12 @@ param custom_model_storage_name string
 ])
 param custom_model_storage_sku string ='Standard_LRS'
 
+@description('Flag to indicate whether to enable integration of data platform resources with either an existing Purview resource')
+param enable_purview bool
+
+@description('Resource reference of an existing Purview Account. Specify a resource name if create_purview=true')
+param purview_resource object
+
 
 // Variables
 var suffix = uniqueString(resourceGroup().id)
@@ -154,3 +160,15 @@ resource grant_formrecognizer_role 'Microsoft.Authorization/roleAssignments@2022
     roleDefinitionId: contributorRoleDefinition.id
   }
 }
+
+// Grant Purview reader role to Storage
+resource grant_purview_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (enable_purview) {
+  name: guid(resourceGroup().id,purview_resource.resourceGroupName,readerRoleDefinition.id)
+  scope: custom_model_storage
+  properties:{
+    principalType: 'ServicePrincipal'
+    principalId: purview_resource.identity.principalId
+    roleDefinitionId: readerRoleDefinition.id
+  }
+}
+
