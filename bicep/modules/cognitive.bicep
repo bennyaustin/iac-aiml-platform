@@ -89,7 +89,7 @@ var suffix = uniqueString(resourceGroup().id)
 // var cogsvc_uniquename = '${cogsvc_name}-${suffix}'
 var formrecognizer_uniquename = '${formrecognizer_name}-${suffix}'
 var custom_model_storage_uniquename = substring('${custom_model_storage_name}${suffix}',0,24)
-var cogsearch_uniquename = '${cogsearch_name}${suffix}'
+var cogsearch_uniquename = '${cogsearch_name}-${suffix}'
 
 // Commented out - Since multi-service cognitive service reuires to accept terms of responsible AI manually from the Azure portal
 // //Multi-service Cognitive
