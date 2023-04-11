@@ -211,6 +211,18 @@ resource readerRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-0
   name: 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
 }
 
+@description('This is the built-in Storage Blob Reader role. See https://learn.microsoft.com/en-gb/azure/role-based-access-control/built-in-roles#storage-blob-data-reader')
+resource sbdr 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  scope: subscription()
+  name: '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1'
+}
+
+@description('This is the built-in Storage Blob Contributor role. See https://learn.microsoft.com/en-gb/azure/role-based-access-control/built-in-roles#storage-blob-data-contributor')
+resource sbdc 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
+  scope: subscription()
+  name: 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
+}
+
 // Grant Form Recognizer contributor role to Storage
 resource grant_formrecognizer_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(resourceGroup().id,formrecognizer.name,contributorRoleDefinition.id)
@@ -233,3 +245,24 @@ resource grant_purview_role 'Microsoft.Authorization/roleAssignments@2022-04-01'
   }
 }
 
+// Grant Cognitive Search to Storage Blob Data Reader role 
+resource grant_sbdr_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id,cogsearch.name,sbdr.id)
+  scope: custom_model_storage
+  properties:{
+    principalType: 'ServicePrincipal'
+    principalId: cogsearch.identity.principalId
+    roleDefinitionId: sbdr.id
+  }
+}
+
+// Grant Cognitive Search to Storage Blob Contributor Reader role 
+resource grant_sbdc_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id,cogsearch.name,sbdc.id)
+  scope: custom_model_storage
+  properties:{
+    principalType: 'ServicePrincipal'
+    principalId: cogsearch.identity.principalId
+    roleDefinitionId: sbdc.id
+  }
+}
