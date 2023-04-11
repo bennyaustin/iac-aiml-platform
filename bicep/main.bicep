@@ -91,6 +91,11 @@ module cogsvc './modules/cognitive.bicep' = {
    formrecognizer_sku: 'S0'
    enable_purview: enable_purview
    purview_resource: purview_ref
+   cogsearch_name: 'ba-cogsearch01'
+   cogsearch_hostingMode: 'default'
+   cogsearch_partitionCount: 1
+   cogsearch_replicaCount: 1
+   cogsearch_sku: 'standard'
  }
 }
 
