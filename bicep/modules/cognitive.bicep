@@ -19,7 +19,8 @@ param sme_tag string
 param formrecognizer_name string
 
 @allowed(['F0','S0'])
-param formrecognizer_sku string
+@description('Form Recognizer SKU name')
+param formrecognizer_sku string ='S0'
 
 @description('Storage account name for custom cognitive services model')
 param custom_model_storage_name string
@@ -43,6 +44,43 @@ param enable_purview bool
 @description('Resource reference of an existing Purview Account. Specify a resource name if create_purview=true')
 param purview_resource object
 
+@description('Cognitive Search resource name')
+param cogsearch_name string
+
+@allowed([
+  'free'
+  'basic'
+  'standard'
+  'standard2'
+  'standard3'
+  'storage_optimized_l1'
+  'storage_optimized_l2'
+])
+@description('Cognitive Search SKU name')
+param cogsearch_sku string ='standard'
+
+@description('Cognitive Search peplicas distribute search workloads across the service. You need at least two replicas to support high availability of query workloads (not applicable to the free tier).')
+@minValue(1)
+@maxValue(12)
+param cogsearch_replicaCount int = 1
+
+@description('Cognitive Search partitions allow for scaling of document count as well as faster indexing by sharding your index over multiple search units.')
+@allowed([
+  1
+  2
+  3
+  4
+  6
+  12
+])
+param cogsearch_partitionCount int = 1
+
+@description('Applicable only for Cognitive Search SKUs set to standard3. You can set this property to enable a single, high density partition that allows up to 1000 indexes, which is much higher than the maximum indexes allowed for any other SKU.')
+@allowed([
+  'default'
+  'highDensity'
+])
+param cogsearch_hostingMode string = 'default'
 
 // Variables
 var suffix = uniqueString(resourceGroup().id)
@@ -135,6 +173,25 @@ resource formrecognizer 'Microsoft.CognitiveServices/accounts@2022-12-01' = {
       statisticsEnabled: false
     }
   }
+}
+
+//Cognitive Search
+
+resource cogsearch 'Microsoft.Search/searchServices@2022-09-01'={
+ name: cogsearch_name
+ location: location
+ tags: {
+  CostCentre: cost_centre_tag
+  Owner: owner_tag
+  SME: sme_tag
+ } 
+ sku: { name: cogsearch_sku}
+ properties:{
+  replicaCount: cogsearch_replicaCount
+  partitionCount: cogsearch_partitionCount
+  hostingMode: cogsearch_hostingMode
+ }
+
 }
 
 // Role Assignment
