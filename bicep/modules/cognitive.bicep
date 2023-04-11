@@ -189,6 +189,7 @@ resource cogsearch 'Microsoft.Search/searchServices@2022-09-01'={
   SME: sme_tag
  } 
  sku: { name: cogsearch_sku}
+ identity: { type: 'SystemAssigned'}
  properties:{
   replicaCount: cogsearch_replicaCount
   partitionCount: cogsearch_partitionCount
