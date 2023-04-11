@@ -44,7 +44,9 @@ param enable_purview bool
 @description('Resource reference of an existing Purview Account. Specify a resource name if create_purview=true')
 param purview_resource object
 
-@description('Cognitive Search resource name')
+@minLength(2)
+@maxLength(60)
+@description('Cognitive Search resource name.Service name must only contain lowercase letters, digits or dashes, cannot use dash as the first two or last one characters, cannot contain consecutive dashes, and is limited between 2 and 60 characters in length.')
 param cogsearch_name string
 
 @allowed([
@@ -87,7 +89,7 @@ var suffix = uniqueString(resourceGroup().id)
 // var cogsvc_uniquename = '${cogsvc_name}-${suffix}'
 var formrecognizer_uniquename = '${formrecognizer_name}-${suffix}'
 var custom_model_storage_uniquename = substring('${custom_model_storage_name}${suffix}',0,24)
-var cogsearch_uniquename = substring('${cogsearch_name}${suffix}',0,60)
+var cogsearch_uniquename = '${cogsearch_name}${suffix}'
 
 // Commented out - Since multi-service cognitive service reuires to accept terms of responsible AI manually from the Azure portal
 // //Multi-service Cognitive
