@@ -235,13 +235,13 @@ resource grant_formrecognizer_role 'Microsoft.Authorization/roleAssignments@2022
 }
 
 // Grant Purview reader role to Storage
-resource grant_purview_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (enable_purview) {
-  name: guid(resourceGroup().id,purview_resource.resourceGroupName,readerRoleDefinition.id)
+resource grant_purview_sbdc_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (enable_purview) {
+  name: guid(resourceGroup().id,purview_resource.resourceGroupName,sbdc.id)
   scope: custom_model_storage
   properties:{
     principalType: 'ServicePrincipal'
     principalId: purview_resource.identity.principalId
-    roleDefinitionId: readerRoleDefinition.id
+    roleDefinitionId: sbdc.id
   }
 }
 
