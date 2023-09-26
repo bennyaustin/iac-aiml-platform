@@ -84,14 +84,25 @@ param cogsearch_partitionCount int = 1
 ])
 param cogsearch_hostingMode string = 'default'
 
+@description('Azure OpenAI resource name')
+param azureopenai_name string
+
+@allowed([
+  'S0'
+])
+@description('Azure OpenAI SKU name')
+param azureopenai_sku string = 'S0'
+
 // Variables
 var suffix = uniqueString(resourceGroup().id)
 // var cogsvc_uniquename = '${cogsvc_name}-${suffix}'
 var formrecognizer_uniquename = '${formrecognizer_name}-${suffix}'
 var custom_model_storage_uniquename = substring('${custom_model_storage_name}${suffix}',0,24)
 var cogsearch_uniquename = '${cogsearch_name}-${suffix}'
+var azureopenai_uniquename = '${azureopenai_name}-${suffix}'
+var azureopenai_gpt4location = 'canadaeast'
 
-// Commented out - Since multi-service cognitive service reuires to accept terms of responsible AI manually from the Azure portal
+// Commented out - Since multi-service cognitive service requires to accept terms of responsible AI manually from the Azure portal
 // //Multi-service Cognitive
 // resource cogsvc 'Microsoft.CognitiveServices/accounts@2022-12-01' = {
 //   name: cogsvc_uniquename
@@ -196,6 +207,24 @@ resource cogsearch 'Microsoft.Search/searchServices@2022-09-01'={
   hostingMode: cogsearch_hostingMode
  }
 
+}
+
+resource aoai_gpt4 'Microsoft.CognitiveServices/accounts@2023-05-01'={
+  name: azureopenai_uniquename
+  location: azureopenai_gpt4location
+  tags: {
+    CostCentre: cost_centre_tag
+    Owner: owner_tag
+    SME: sme_tag
+  }
+  sku: { name: azureopenai_sku}
+  kind: 'OpenAI'
+  identity: { type: 'SystemAssigned'}
+  properties:{
+    apiProperties:{
+      statisticsEnabled: false
+    }
+  }
 }
 
 // Role Assignment

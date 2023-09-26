@@ -96,6 +96,8 @@ module cogsvc './modules/cognitive.bicep' = {
    cogsearch_partitionCount: 1
    cogsearch_replicaCount: 1
    cogsearch_sku: 'standard'
+   azureopenai_name: 'ba-aoai02'
+   azureopenai_sku: 'S0'
  }
 }
 
