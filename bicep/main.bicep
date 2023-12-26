@@ -26,6 +26,9 @@ param purview_rg_name string = 'rg-datagovernance'
 @description('Resource Name of an existing Purview Account. Required if create_purview=true')
 param purview_resource_name string = 'ba-purview01-6spfx5oytiivq'
 
+@description('Resource Name of an existing Storage Account for Azure Machine Learning')
+param aiml_storage_name string = 'bacustmodelstorage01q575'
+
 @description('Timestamp that will be appendedto the deployment name')
 param deployment_suffix string = utcNow()
 
@@ -33,7 +36,7 @@ param deployment_suffix string = utcNow()
 // Variables
 var keyvault_deployment_name = 'keyvault_deployment_${deployment_suffix}'
 var cogsvc_deployment_name = 'cogsvc_deployment_${deployment_suffix}'
-
+var aml_deployment_name = 'aml_deployment_${deployment_suffix}'
 
 // Create data platform resource group
 resource aiml_rg  'Microsoft.Resources/resourceGroups@2022-09-01' = {
@@ -64,6 +67,13 @@ resource kv_ref 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: kv.outputs.keyvault_name
   scope: aiml_rg
 }
+
+//Get Storage reference
+resource aiml_storage_ref 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+  name: aiml_storage_name
+  scope: aiml_rg
+}
+
 
 //Get existing Purview reference
 resource purview_rg_ref 'Microsoft.Resources/resourceGroups@2022-09-01' existing = if (enable_purview) {
@@ -101,6 +111,17 @@ module cogsvc './modules/cognitive.bicep' = {
  }
 }
 
-
-
-
+//Deploy Azure Machine Learning Workspace
+module aml './modules/machinelearning.bicep' ={
+  name: aml_deployment_name
+  scope: aiml_rg
+  params:{
+    location: rglocation
+    cost_centre_tag: cost_centre_tag
+    owner_tag: owner_tag
+    sme_tag: sme_tag
+    aml_name: 'ba-aml01'
+    amlkeyvault_ref: kv_ref
+    amlstorage_ref: aiml_storage_ref
+}
+}

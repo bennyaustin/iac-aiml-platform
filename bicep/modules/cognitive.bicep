@@ -12,7 +12,7 @@ param owner_tag string
 @description('Subject Matter Expert (SME) tag that will be applied to all resources in this deployment')
 param sme_tag string
 
-// @description('Mult-service Cogntive Service resource name')
+// @description('Multi-service Cogntive Service resource name')
 // param cogsvc_name string
 
 @description('Form Recognizer resource name')
