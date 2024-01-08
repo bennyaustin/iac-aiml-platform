@@ -111,17 +111,19 @@ module cogsvc './modules/cognitive.bicep' = {
  }
 }
 
-//Deploy Azure Machine Learning Workspace
-module aml './modules/machinelearning.bicep' ={
-  name: aml_deployment_name
-  scope: aiml_rg
-  params:{
-    location: rglocation
-    cost_centre_tag: cost_centre_tag
-    owner_tag: owner_tag
-    sme_tag: sme_tag
-    aml_name: 'ba-aml01'
-    amlkeyvault_ref: kv_ref
-    amlstorage_ref: aiml_storage_ref
-}
-}
+// Temporarily commenting off due to scope issues - Deploy Azure Machine Learning Workspace
+
+// //Deploy Azure Machine Learning Workspace
+// module aml './modules/machinelearning.bicep' ={
+//   name: aml_deployment_name
+//   scope: aiml_rg
+//   params:{
+//     location: rglocation
+//     cost_centre_tag: cost_centre_tag
+//     owner_tag: owner_tag
+//     sme_tag: sme_tag
+//     aml_name: 'ba-aml01'
+//     amlkeyvault_ref: kv_ref
+//     amlstorage_ref: aiml_storage_ref
+// }
+// }
