@@ -24,7 +24,7 @@ param amlstorage_ref object
 var suffix = uniqueString(resourceGroup().id)
 var aml_uniquename = '${aml_name}-${suffix}'
 
-resource aml 'Microsoft.MachineLearning/workspaces@2019-10-01' = {
+resource aml 'Microsoft.MachineLearningServices/workspaces@2023-10-01' = {
   name: aml_uniquename
   location: location
   tags: {
