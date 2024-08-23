@@ -24,10 +24,10 @@ param enable_purview bool =true
 param purview_rg_name string = 'rg-datagovernance'
 
 @description('Resource Name of an existing Purview Account. Required if create_purview=true')
-param purview_resource_name string = 'ba-purview01-6spfx5oytiivq'
+param purview_resource_name string = 'ContosoDG'
 
 @description('Resource Name of an existing Storage Account for Azure Machine Learning')
-param aiml_storage_name string = 'bacustmodelstorage01q575'
+param aiml_storage_name string = 'baaimlstorage01'
 
 @description('Timestamp that will be appendedto the deployment name')
 param deployment_suffix string = utcNow()
@@ -36,7 +36,7 @@ param deployment_suffix string = utcNow()
 // Variables
 var keyvault_deployment_name = 'keyvault_deployment_${deployment_suffix}'
 var cogsvc_deployment_name = 'cogsvc_deployment_${deployment_suffix}'
-var aml_deployment_name = 'aml_deployment_${deployment_suffix}'
+// var aml_deployment_name = 'aml_deployment_${deployment_suffix}'
 
 // Create data platform resource group
 resource aiml_rg  'Microsoft.Resources/resourceGroups@2022-09-01' = {
@@ -68,10 +68,10 @@ resource kv_ref 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   scope: aiml_rg
 }
 
-//Get Storage reference
-resource aiml_storage_ref 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
-  name: aiml_storage_name
-  scope: aiml_rg
+// //Get Storage reference
+// resource aiml_storage_ref 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
+//   name: aiml_storage_name
+//   scope: aiml_rg
 }
 
 
@@ -91,8 +91,8 @@ module cogsvc './modules/cognitive.bicep' = {
  name: cogsvc_deployment_name
  scope: aiml_rg
  params:{
-   formrecognizer_name: 'ba-formrecognizer01'
-   custom_model_storage_name: 'bacustmodelstorage01'
+   formrecognizer_name: 'ba-doci01'
+   custom_model_storage_name: 'baaimlstorage01'
    custom_model_storage_sku: 'Standard_LRS'
    location: rglocation
    cost_centre_tag: cost_centre_tag
@@ -101,12 +101,12 @@ module cogsvc './modules/cognitive.bicep' = {
    formrecognizer_sku: 'S0'
    enable_purview: enable_purview
    purview_resource: purview_ref
-   cogsearch_name: 'ba-cogsearch01'
+   cogsearch_name: 'ba-aisearch01'
    cogsearch_hostingMode: 'default'
    cogsearch_partitionCount: 1
    cogsearch_replicaCount: 1
    cogsearch_sku: 'standard'
-   azureopenai_name: 'ba-aoai02'
+   azureopenai_name: 'ba-aoai01'
    azureopenai_sku: 'S0'
  }
 }
