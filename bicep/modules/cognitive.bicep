@@ -295,3 +295,4 @@ resource grant_sbdc_role 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
     roleDefinitionId: sbdc.id
   }
 }
+
