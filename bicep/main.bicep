@@ -72,7 +72,7 @@ resource kv_ref 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
 // resource aiml_storage_ref 'Microsoft.Storage/storageAccounts@2021-04-01' existing = {
 //   name: aiml_storage_name
 //   scope: aiml_rg
-}
+// }
 
 
 //Get existing Purview reference
