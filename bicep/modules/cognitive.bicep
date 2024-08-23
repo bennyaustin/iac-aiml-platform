@@ -100,7 +100,7 @@ var formrecognizer_uniquename = '${formrecognizer_name}-${suffix}'
 var custom_model_storage_uniquename = substring('${custom_model_storage_name}${suffix}',0,24)
 var cogsearch_uniquename = '${cogsearch_name}-${suffix}'
 var azureopenai_uniquename = '${azureopenai_name}-${suffix}'
-var azureopenai_gpt4location = 'canadaeast'
+var azureopenai_gpt4location = 'australiaeast'
 
 // Commented out - Since multi-service cognitive service requires to accept terms of responsible AI manually from the Azure portal
 // //Multi-service Cognitive
