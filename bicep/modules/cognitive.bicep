@@ -158,6 +158,13 @@ resource enable_CORS_custom_model_storage 'Microsoft.Storage/storageAccounts/blo
           maxAgeInSeconds: 200  
         }
         {
+          allowedOrigins: ['https://documentintelligence.ai.azure.com']
+          allowedHeaders: ['*']
+          exposedHeaders: ['*']
+          allowedMethods: ['DELETE','GET','HEAD','MERGE','OPTIONS','PATCH','POST','PUT']
+          maxAgeInSeconds: 200  
+        }        
+        {
           allowedOrigins: ['*']
           allowedHeaders: ['*']
           exposedHeaders: ['*']
